@@ -27,6 +27,7 @@ public class HomeController {
     public String postNote(@ModelAttribute("Note") Note note, Model model) {
         notesService.addNote(note.getTitle(), note.getDescription());
         model.addAttribute("notes", this.notesService.getNotes());
+        System.out.println("test");
         return "home";
     }
 

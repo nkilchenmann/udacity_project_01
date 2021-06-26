@@ -2,10 +2,12 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.NoteMapper;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Service
 public class NotesService {
@@ -17,20 +19,19 @@ public class NotesService {
         this.noteList = new ArrayList<>();
     }
 
-    public List<Note> getNotes(){
-        /*List<Note> noteList = new ArrayList<>();
-        Note noteOne = new Note(1,"noteOne", "This is my first note");
-        Note noteTwo = new Note(2, "noteTwo", "This is my second note");
-        Note noteThree = new Note(3, "Doggo", "Ruby");
-        noteList.add(noteOne);
-        noteList.add(noteTwo);
-        noteList.add(noteThree);*/
+    public List<Note> getNotes() {
+        //TODO: somehow inject the userId here
+        noteList = noteMapper.getNotes(5);
         return noteList;
     }
 
-    public void addNote(String noteTitle, String noteDescription){
-        Note note = new Note(5,noteTitle,noteDescription);
-        noteList.add(note);
-        return;
+    public void addNote(String noteTitle, String noteDescription) {
+        Note note = new Note(5, noteTitle, noteDescription);
+        noteMapper.addNote(note);
+    }
+
+    public void deleteNote(Integer noteId) {
+        Predicate<Note> predicate = note -> note.getNoteId() == 5;
+        noteList.removeIf(predicate);
     }
 }

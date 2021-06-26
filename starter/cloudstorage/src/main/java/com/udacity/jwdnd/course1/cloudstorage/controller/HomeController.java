@@ -4,10 +4,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class HomeController {
@@ -28,6 +25,12 @@ public class HomeController {
         notesService.addNote(note.getTitle(), note.getDescription());
         model.addAttribute("notes", this.notesService.getNotes());
         System.out.println("test");
+        return "home";
+    }
+
+    @GetMapping("/deleteNote")
+    public String deleteNote(@ModelAttribute("Note") Note note, Model model){
+        notesService.deleteNote(5);
         return "home";
     }
 

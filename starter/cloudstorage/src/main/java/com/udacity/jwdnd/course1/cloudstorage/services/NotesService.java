@@ -20,12 +20,13 @@ public class NotesService {
     }
 
     public List<Note> getNotes() {
-        //TODO: somehow inject the userId here
+        //TODO: somehow inject the userid here
         noteList = noteMapper.getNotes(5);
         return noteList;
     }
 
     public void addNote(String noteTitle, String noteDescription) {
+        //TODO: somehow inject the userid here
         Note note = new Note(5, noteTitle, noteDescription);
         noteMapper.addNote(note);
     }

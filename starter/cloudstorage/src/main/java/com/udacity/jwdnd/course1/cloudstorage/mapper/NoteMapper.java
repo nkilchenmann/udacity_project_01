@@ -11,10 +11,13 @@ public interface NoteMapper {
     List<Note> getNotes(Integer userId);
 
     @Insert("INSERT INTO NOTES (notetitle, notedescription) VALUES(#{title}, #{description})")
-    @Options(useGeneratedKeys = true,keyProperty = "noteid")
+    @Options(useGeneratedKeys = true,keyProperty = "noteId")
     int addNote(Note note);
 
-    @Delete("DELETE FROM NOTES WHERE noteid=#{id}")
-    void deleteNote(Integer id);
+    @Update("UPDATE NOTES set noteTitle=#{title}, notedescription=#{description} WHERE noteId=#{noteId}")
+    void updateNote(Note note);
+
+    @Delete("DELETE FROM NOTES WHERE noteid=#{noteId}")
+    void deleteNote(Integer noteId);
 
 }

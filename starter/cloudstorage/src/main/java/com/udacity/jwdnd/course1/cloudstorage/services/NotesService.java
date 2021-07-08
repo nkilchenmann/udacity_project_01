@@ -12,27 +12,26 @@ import java.util.function.Predicate;
 @Service
 public class NotesService {
     private NoteMapper noteMapper;
-    private List<Note> noteList;
 
     public NotesService(NoteMapper noteMapper) {
         this.noteMapper = noteMapper;
-        this.noteList = new ArrayList<>();
     }
 
     public List<Note> getNotes() {
         //TODO: somehow inject the userid here
-        noteList = noteMapper.getNotes(5);
-        return noteList;
+        return noteMapper.getNotes(5);
     }
 
     public void addNote(String noteTitle, String noteDescription) {
         //TODO: somehow inject the userid here
-        Note note = new Note(5, noteTitle, noteDescription);
-        noteMapper.addNote(note);
+        noteMapper.addNote(new Note(5, noteTitle, noteDescription));
+    }
+
+    public void editNote(Note note){
+        noteMapper.updateNote(note);
     }
 
     public void deleteNote(Integer noteId) {
-        Predicate<Note> predicate = note -> note.getNoteId() == 5;
-        noteList.removeIf(predicate);
+        noteMapper.deleteNote(noteId);
     }
 }

@@ -1,24 +1,30 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomeController {
     private NotesService notesService;
+    private CredentialService credentialService;
 
-    public HomeController(NotesService notesService) {
+    public HomeController(NotesService notesService, CredentialService credentialService) {
         this.notesService = notesService;
+        this.credentialService = credentialService;
     }
 
     @GetMapping("/home")
-    public String getHomePage(@ModelAttribute("Note") Note note, Model model) {
+    public String getHomePage(@ModelAttribute("Note") Note note, @ModelAttribute("Credential") Credential credential, Model model) {
         model.addAttribute("notes", this.notesService.getNotes());
+        model.addAttribute("credentials", this.credentialService.getCredentials());
         return "home";
     }
 
@@ -40,4 +46,12 @@ public class HomeController {
         notesService.deleteNote(noteId);
         return "redirect:/home";
     }
+
+    @PostMapping("/credential")
+    public String postCredential(@ModelAttribute("Credential") Credential credential){
+        System.out.println("***DEBUG***: adding a new credential");
+        credentialService.addCredential(credential);
+        return "redirect:/home";
+    }
+
 }

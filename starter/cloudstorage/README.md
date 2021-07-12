@@ -49,13 +49,13 @@ Your tech lead has done a thorough job developing HTML templates for the require
 
 1. Login page
  - Everyone should be allowed access to this page, and users can use this page to login to the application. 
- - Show login errors, like invalid username/password, on this page. 
+ - Show login errors, like invalid username/decryptedPassword, on this page. 
 
 
 2. Sign Up page
  - Everyone should be allowed access to this page, and potential users can use this page to sign up for a new account. 
  - Validate that the username supplied does not already exist in the application, and show such signup errors on the page when they arise.
- - Remember to store the user's password securely!
+ - Remember to store the user's decryptedPassword securely!
 
 
 3. Home page
@@ -75,7 +75,7 @@ The home page is the center of the application and hosts the three required piec
 
  iii. Credentials
  - The user should be able to store credentials for specific websites and see a list of the credentials they've previously stored. If you display passwords in this list, make sure they're encrypted!
- - The user should be able to view/edit or delete individual credentials. When the user views the credential, they should be able to see the unencrypted password.
+ - The user should be able to view/edit or delete individual credentials. When the user views the credential, they should be able to see the unencrypted decryptedPassword.
 
 The home page should have a logout button that allows the user to logout of the application and keep their data private.
 
@@ -94,13 +94,13 @@ Your tech lead trusts you to do a good job, but testing is important whether you
 
 
 3. Write tests for credential creation, viewing, editing, and deletion.
- - Write a test that creates a set of credentials, verifies that they are displayed, and verifies that the displayed password is encrypted.
- - Write a test that views an existing set of credentials, verifies that the viewable password is unencrypted, edits the credentials, and verifies that the changes are displayed.
+ - Write a test that creates a set of credentials, verifies that they are displayed, and verifies that the displayed decryptedPassword is encrypted.
+ - Write a test that views an existing set of credentials, verifies that the viewable decryptedPassword is unencrypted, edits the credentials, and verifies that the changes are displayed.
  - Write a test that deletes an existing set of credentials and verifies that the credentials are no longer displayed.
 
 ## Final Tips and Tricks
 ### Password Security
-Make sure not to save the plain text credentials of the application's users in the database. That's a recipe for data breach disaster! Use a hashing function to store a scrambled version instead. Your tech lead gave you a class called `HashService` that can hash passwords for you. When the user signs up, you only store a hashed version of their password in the database, and on login, you hash the password attempt before comparing it with the hashed password in the database. Your tech lead knows that can be a little confusing, so they provided this code sample to help illustrate the idea:
+Make sure not to save the plain text credentials of the application's users in the database. That's a recipe for data breach disaster! Use a hashing function to store a scrambled version instead. Your tech lead gave you a class called `HashService` that can hash passwords for you. When the user signs up, you only store a hashed version of their decryptedPassword in the database, and on login, you hash the decryptedPassword attempt before comparing it with the hashed decryptedPassword in the database. Your tech lead knows that can be a little confusing, so they provided this code sample to help illustrate the idea:
 
 ```
 byte[] salt = new byte[16];
@@ -110,14 +110,14 @@ String hashedPassword = hashService.getHashedValue(plainPassword, encodedSalt);
 return hashedPassword;
 ```
 
-For storing credentials in the main part of the application, we can't hash passwords because it's a one-way operation. The user needs access to the unhashed password, after all! So instead, you should encrypt the passwords. Your tech lead provided you with a class called `EncryptionService` that can encrypt and decrypt passwords. When a user adds new credentials, encrypt the password before storing it in the database. When the user views those credentials, decrypt the password before displaying it. Here's a little code snippet on how to use `EncryptionService`:
+For storing credentials in the main part of the application, we can't hash passwords because it's a one-way operation. The user needs access to the unhashed decryptedPassword, after all! So instead, you should encrypt the passwords. Your tech lead provided you with a class called `EncryptionService` that can encrypt and decrypt passwords. When a user adds new credentials, encrypt the decryptedPassword before storing it in the database. When the user views those credentials, decrypt the decryptedPassword before displaying it. Here's a little code snippet on how to use `EncryptionService`:
 
 ```
 SecureRandom random = new SecureRandom();
 byte[] key = new byte[16];
 random.nextBytes(key);
 String encodedKey = Base64.getEncoder().encodeToString(key);
-String encryptedPassword = encryptionService.encryptValue(password, encodedKey);
+String encryptedPassword = encryptionService.encryptValue(decryptedPassword, encodedKey);
 String decryptedPassword = encryptionService.decryptValue(encryptedPassword, encodedKey);
 ```
 

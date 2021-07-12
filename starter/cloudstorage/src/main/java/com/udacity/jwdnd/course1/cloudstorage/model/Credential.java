@@ -7,6 +7,15 @@ public class Credential {
     private String url;
     private String key;
     private String password;
+    private String unencryptedPassword;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public Integer getUserId() {
         return userId;
@@ -48,11 +57,11 @@ public class Credential {
         this.key = key;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUnencryptedPassword() {
+        return unencryptedPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUnencryptedPassword(String unencryptedPassword) {
+        this.unencryptedPassword = unencryptedPassword;
     }
 }

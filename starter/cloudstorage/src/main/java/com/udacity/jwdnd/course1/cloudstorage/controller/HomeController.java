@@ -31,10 +31,8 @@ public class HomeController {
     @PostMapping("/note")
     public String postNote(@ModelAttribute("Note") Note note) {
         if (note.getNoteId() != null) {
-            System.out.println("***DEBUG***: updating note: " + note.getNoteId().toString());
             notesService.editNote(note);
         } else {
-            System.out.println("***DEBUG***: creating a new note");
             notesService.addNote(note.getTitle(), note.getDescription());
         }
         return "redirect:/home";
@@ -48,9 +46,19 @@ public class HomeController {
     }
 
     @PostMapping("/credential")
-    public String postCredential(@ModelAttribute("Credential") Credential credential){
-        System.out.println("***DEBUG***: adding a new credential");
-        credentialService.addCredential(credential);
+    public String postCredential(@ModelAttribute("Credential") Credential credential) {
+        if (credential.getCredentialId() != null) {
+            credentialService.updateCredential(credential);
+        } else {
+            credentialService.addCredential(credential);
+        }
+        return "redirect:/home";
+    }
+
+    @GetMapping("/deleteCredential")
+    public String deleteCredential(@RequestParam(name = "id") Integer credentialId, @ModelAttribute("Credential") Note credential) {
+        //TODO: pass on userId for database check before modification (context.userid or something)
+        credentialService.deleteCredential(credentialId);
         return "redirect:/home";
     }
 

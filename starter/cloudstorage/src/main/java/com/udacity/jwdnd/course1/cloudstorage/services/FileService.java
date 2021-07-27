@@ -40,7 +40,7 @@ public class FileService {
         fileMapper.deleteFile(fileId);
     }
 
-    public UploadFile downloadFile(Integer fileId) {
+    public UploadFile getFile(Integer fileId) {
         UploadFile myfile = fileMapper.getFile(fileId);
         return fileMapper.getFile(fileId);
     }

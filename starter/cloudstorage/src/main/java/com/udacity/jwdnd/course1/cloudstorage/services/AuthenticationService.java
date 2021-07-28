@@ -32,10 +32,23 @@ public class AuthenticationService implements AuthenticationProvider {
             String hashedPassword = hashService.getHashedValue(password, encodedSalt);
             if (user.getPassword().equals(hashedPassword)) {
                 return new UsernamePasswordAuthenticationToken(username, password, new ArrayList<>());
+            } else {
+                //loginSuccessStatus = 'failure'
+                return null;
             }
+        } else {
+            //loginSuccessStatus = 'failure'
+            return null;
         }
 
-        return null;
+
+        /*if(userService.addUser(user)){
+            model.addAttribute("userCreationStatus", "success");
+        } else {
+            model.addAttribute("userCreationStatus", "failure");
+        }*/
+
+
     }
 
     @Override

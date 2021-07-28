@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,9 +24,12 @@ public class SignupController {
     }
 
     @PostMapping
-    public String createSignup(@ModelAttribute("User") User user){
-        userService.addUser(user);
-        return "redirect:/login";
+    public void createSignup(@ModelAttribute("User") User user, Model model) {
+        if (userService.addUser(user)) {
+            model.addAttribute("userCreationStatus", "success");
+        } else {
+            model.addAttribute("userCreationStatus", "failure");
+        }
     }
 
 

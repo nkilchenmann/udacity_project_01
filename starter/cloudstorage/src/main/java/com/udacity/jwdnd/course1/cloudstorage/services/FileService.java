@@ -9,36 +9,37 @@ import java.io.IOException;
 import java.util.List;
 
 //TODO: if filename already exists --> don't upload and show error message
-//TODO: username database requests
 //TODO: fileupload possible without selecting a file
 @Service
 public class FileService {
     private FileMapper fileMapper;
+    private Utilities utilities;
 
-    public FileService(FileMapper fileMapper) {
+    public FileService(FileMapper fileMapper, Utilities utilities) {
         this.fileMapper = fileMapper;
+        this.utilities = utilities;
     }
 
     public List<UploadFile> getFiles() {
-        return fileMapper.getFiles();
+        return fileMapper.getFiles(utilities.getCurrentUserId());
     }
 
     public void addFile(MultipartFile multipartFile) throws IOException {
-        UploadFile uploadFile = new UploadFile();
-        uploadFile.setFiledata(multipartFile.getBytes());
-        uploadFile.setFilename(multipartFile.getOriginalFilename());
-        uploadFile.setContenttype(multipartFile.getContentType());
-        uploadFile.setUserid(5);
-        uploadFile.setFilesize(String.valueOf(multipartFile.getSize()));
-        fileMapper.addFile(uploadFile);
+        fileMapper.addFile(new UploadFile(
+                null,
+                multipartFile.getOriginalFilename(),
+                multipartFile.getContentType(),
+                String.valueOf(multipartFile.getSize()),
+                utilities.getCurrentUserId(),
+                multipartFile.getBytes()
+        ));
     }
 
     public void deleteFile(Integer fileId) {
-        fileMapper.deleteFile(fileId);
+        fileMapper.deleteFile(fileId, utilities.getCurrentUserId());
     }
 
     public UploadFile getFile(Integer fileId) {
-        UploadFile myfile = fileMapper.getFile(fileId);
-        return fileMapper.getFile(fileId);
+        return fileMapper.getFile(fileId, utilities.getCurrentUserId());
     }
 }

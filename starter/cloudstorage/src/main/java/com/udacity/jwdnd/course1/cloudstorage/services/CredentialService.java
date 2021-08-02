@@ -39,7 +39,6 @@ public class CredentialService {
         credentialMapper.addCredential(credential);
     }
 
-    //TODO: is userId still set?
     public void updateCredential(Credential credential) {
         SecureRandom random = new SecureRandom();
         byte[] key = new byte[16];

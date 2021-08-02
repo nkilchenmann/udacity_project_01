@@ -1,9 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import java.sql.Blob;
-
 public class UploadFile {
     private Integer fileId;
     private String filename;
@@ -11,6 +7,15 @@ public class UploadFile {
     private String filesize;
     private Integer userid;
     private byte[] filedata;
+
+    public UploadFile(Integer fileId, String filename, String contenttype, String filesize, Integer userid, byte[] filedata) {
+        this.fileId = fileId;
+        this.filename = filename;
+        this.contenttype = contenttype;
+        this.filesize = filesize;
+        this.userid = userid;
+        this.filedata = filedata;
+    }
 
     public Integer getFileId() {
         return fileId;

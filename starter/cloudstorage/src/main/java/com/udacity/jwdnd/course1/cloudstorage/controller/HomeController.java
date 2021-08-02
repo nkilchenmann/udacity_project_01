@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class HomeController {
@@ -25,7 +24,13 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String getHomePage(@ModelAttribute("Note") Note note, @ModelAttribute("Credential") Credential credential, @ModelAttribute("UploadFile") UploadFile uploadFile, Model model) {
+    public String getHomePage(
+            @ModelAttribute("Note") Note note,
+            @ModelAttribute("Credential") Credential credential,
+            @ModelAttribute("UploadFile") UploadFile uploadFile,
+            Model model) {
+
+
         model.addAttribute("notes", this.notesService.getNotes());
         model.addAttribute("credentials", this.credentialService.getCredentials());
         model.addAttribute("uploadFiles", this.fileService.getFiles());

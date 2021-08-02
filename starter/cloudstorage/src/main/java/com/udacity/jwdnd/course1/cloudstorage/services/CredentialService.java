@@ -12,14 +12,16 @@ import java.util.List;
 public class CredentialService {
     private CredentialMapper credentialMapper;
     private EncryptionService encryptionService;
+    private Utilities utilities;
 
-    public CredentialService(CredentialMapper credentialMapper, EncryptionService encryptionService) {
+    public CredentialService(CredentialMapper credentialMapper, EncryptionService encryptionService, Utilities utilities) {
         this.credentialMapper = credentialMapper;
         this.encryptionService = encryptionService;
+        this.utilities = utilities;
     }
 
     public List<Credential> getCredentials() {
-        List<Credential> credentialList = credentialMapper.getCredentials();
+        List<Credential> credentialList = credentialMapper.getCredentials(utilities.getCurrentUserId());
         for (Credential cred : credentialList) {
             cred.setUnencryptedPassword(encryptionService.decryptValue(cred.getPassword(), cred.getKey()));
         }
@@ -33,9 +35,11 @@ public class CredentialService {
         String encodedKey = Base64.getEncoder().encodeToString(key);
         credential.setKey(encodedKey);
         credential.setPassword(encryptionService.encryptValue(credential.getPassword(), encodedKey));
+        credential.setUserId(utilities.getCurrentUserId());
         credentialMapper.addCredential(credential);
     }
 
+    //TODO: is userId still set?
     public void updateCredential(Credential credential) {
         SecureRandom random = new SecureRandom();
         byte[] key = new byte[16];
@@ -47,6 +51,6 @@ public class CredentialService {
     }
 
     public void deleteCredential(Integer credentialId) {
-        credentialMapper.deleteCredential(credentialId);
+        credentialMapper.deleteCredential(credentialId, utilities.getCurrentUserId());
     }
 }

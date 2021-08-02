@@ -1,37 +1,36 @@
 package com.udacity.jwdnd.course1.cloudstorage.services;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.NoteMapper;
-import com.udacity.jwdnd.course1.cloudstorage.model.User;
+import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 @Service
 public class NotesService {
     private NoteMapper noteMapper;
+    private UserService userService;
+    private Utilities utilities;
 
-    public NotesService(NoteMapper noteMapper) {
+    public NotesService(NoteMapper noteMapper, UserService userService, Utilities utilities) {
         this.noteMapper = noteMapper;
+        this.userService = userService;
+        this.utilities = utilities;
     }
 
     public List<Note> getNotes() {
-        //TODO: somehow inject the userid here
-        return noteMapper.getNotes(5);
+        return noteMapper.getNotes(utilities.getCurrentUserId());
     }
 
-    public void addNote(String noteTitle, String noteDescription) {
-        //TODO: somehow inject the userid here
-        noteMapper.addNote(new Note(5, noteTitle, noteDescription));
+    public void addNote(Integer noteId, String noteTitle, String noteDescription) {
+        noteMapper.addNote(new Note(noteId, noteTitle, noteDescription, utilities.getCurrentUserId()));
     }
 
-    public void editNote(Note note){
+    public void editNote(Note note) {
         noteMapper.updateNote(note);
     }
 
     public void deleteNote(Integer noteId) {
-        noteMapper.deleteNote(noteId);
+        noteMapper.deleteNote(noteId, utilities.getCurrentUserId());
     }
 }

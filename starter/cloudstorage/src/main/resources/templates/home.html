@@ -30,7 +30,8 @@
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
-                <form action="#" enctype="multipart/form-data" th:action="@{/file}" th:object="${UploadFile}" method="POST">
+                <form action="#" enctype="multipart/form-data" th:action="@{/file}" th:object="${UploadFile}"
+                      method="POST">
                     <div class="container">
                         <div class="row" style="margin: 1em;">
                             <div class="col-sm-2">
@@ -56,8 +57,10 @@
                         <tbody>
                         <tr th:each="uploadFile : ${uploadFiles}">
                             <td>
-                                <a target="_blank" th:href="@{/downloadFile(fileId=${uploadFile.fileId})}" class="btn btn-success" download>View</a>
-                                <a th:href="@{/deleteFile(fileId=${uploadFile.fileId})}" class="btn btn-danger">Delete</a>
+                                <a target="_blank" th:href="@{/downloadFile(fileId=${uploadFile.fileId})}"
+                                   class="btn btn-success" download>View</a>
+                                <a th:href="@{/deleteFile(fileId=${uploadFile.fileId})}"
+                                   class="btn btn-danger">Delete</a>
                             </td>
                             <th scope="row" th:text="${uploadFile.filename}">ExampleFile.txt</th>
                         </tr>
@@ -84,9 +87,15 @@
                         <tr th:each="note: ${notes}">
                             <td>
                                 <button type="submit" class="btn btn-success"
-                                        th:data-noteId=${note.noteId} th:data-noteTitle=${note.title}
-                                        th:data-noteDescription=${note.description}
-                                        onclick="showNoteModal(this.getAttribute('data-noteId'),this.getAttribute('data-noteTitle'),this.getAttribute('data-noteDescription'))">
+                                        th:data-noteId="${note.noteId}"
+                                        th:data-noteTitle="${note.title}"
+                                        th:data-noteDescription="${note.description}"
+                                        th:data-noteUserId="${note.userId}"
+                                        onclick="showNoteModal(
+                                        this.getAttribute('data-noteId'),
+                                        this.getAttribute('data-noteTitle'),
+                                        this.getAttribute('data-noteDescription'),
+                                        this.getAttribute('data-noteUserId'))">
                                     Edit
                                 </button>
                                 <a th:href="@{/deleteNote(noteId=${note.noteId})}" class="btn btn-danger">Delete</a>
@@ -109,12 +118,12 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" th:action="@{/note}" th:object="${Note}" method="post">
+                                <form action="#" th:action="@{/note}" th:object="${Note}" method="POST">
                                     <input type="hidden" name="noteId" id="note-id">
+                                    <input type="hidden" name="userId" id="note-userId">
                                     <div class="form-group">
                                         <label for="note-title" class="col-form-label">Title</label>
                                         <input type="text" name="noteTitle" class="form-control" id="note-title"
-                                               th:text="${title}"
                                                th:field=*{title} maxlength="20" required>
                                     </div>
                                     <div class="form-group">
@@ -155,15 +164,17 @@
                         <tr th:each="credential: ${credentials}">
                             <td>
                                 <button type="submit" class="btn btn-success"
-                                        th:data-credentialId=${credential.credentialId}
-                                        th:data-credentialUrl=${credential.url}
-                                        th:data-credentialUsername=${credential.username}
-                                        th:data-credentialPassword=${credential.unencryptedPassword}
+                                        th:data-credentialId="${credential.credentialId}"
+                                        th:data-credentialUrl="${credential.url}"
+                                        th:data-credentialUsername="${credential.username}"
+                                        th:data-credentialPassword="${credential.unencryptedPassword}"
+                                        th:data-credentialUserId="${credential.userId}"
                                         onclick="showCredentialModal(
                                         this.getAttribute('data-credentialId'),
                                         this.getAttribute('data-credentialUrl'),
                                         this.getAttribute('data-credentialUsername'),
-                                        this.getAttribute('data-credentialPassword')
+                                        this.getAttribute('data-credentialPassword'),
+                                        this.getAttribute('data-credentialUserId')
                                         )">Edit
                                 </button>
                                 <a th:href="@{/deleteCredential(id=${credential.credentialId})}" class="btn btn-danger">Delete</a>
@@ -189,6 +200,7 @@
                             <div class="modal-body">
                                 <form action="#" th:action="@{/credential}" th:object="${Credential}" method="POST">
                                     <input type="hidden" name="credentialId" id="credential-id">
+                                    <input type="hidden" name="userId" id="credential-userId">
                                     <div class="form-group">
                                         <label for="note-title" class="col-form-label">URL</label>
                                         <input type="text" name="url" class="form-control" id="credential-url"
@@ -229,23 +241,23 @@
 
 <script type="text/javascript">
             // For opening the note modal
-            function showNoteModal(noteId, noteTitle, noteDescription) {
+            function showNoteModal(noteId, noteTitle, noteDescription, userId) {
                 $('#note-id').val(noteId ? noteId : '');
                 $('#note-title').val(noteTitle ? noteTitle : '');
                 $('#note-description').val(noteDescription ? noteDescription : '');
+                $('#note-userId').val(userId ? userId : '');
                 $('#noteModal').modal('show');
             }
 
             // For opening the credentials modal
-            function showCredentialModal(credentialId, url, username, decryptedPassword) {
+            function showCredentialModal(credentialId, url, username, decryptedPassword, userId) {
                 $('#credential-id').val(credentialId ? credentialId : '');
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
                 $('#credential-decryptedPassword').val(decryptedPassword ? decryptedPassword : '');
+                $('#credential-userId').val(userId ? userId : '');
                 $('#credentialModal').modal('show');
             }
-
-
 
 
 </script>

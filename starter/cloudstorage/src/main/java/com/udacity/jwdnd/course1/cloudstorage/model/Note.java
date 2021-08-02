@@ -6,11 +6,11 @@ public class Note {
     private String title;
     private String description;
 
-    public Note(Integer userId, String title, String description) {
-        this.userId = userId;
+    public Note(Integer noteId, String title, String description, Integer userId) {
         this.noteId = noteId;
         this.title = title;
         this.description = description;
+        this.userId = userId;
     }
 
     public Integer getNoteId() {

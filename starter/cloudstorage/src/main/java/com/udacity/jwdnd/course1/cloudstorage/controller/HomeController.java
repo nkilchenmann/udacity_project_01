@@ -33,7 +33,7 @@ public class HomeController {
 
         model.addAttribute("notes", this.notesService.getNotes());
         model.addAttribute("credentials", this.credentialService.getCredentials());
-        model.addAttribute("uploadFiles", this.fileService.getFiles());
+        model.addAttribute("uploadFiles", this.fileService.getFileList());
         return "home";
     }
 }

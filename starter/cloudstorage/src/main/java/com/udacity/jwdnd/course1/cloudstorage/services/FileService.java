@@ -8,8 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-//TODO: if filename already exists --> don't upload and show error message
-//TODO: fileupload possible without selecting a file
 @Service
 public class FileService {
     private FileMapper fileMapper;
@@ -20,8 +18,8 @@ public class FileService {
         this.utilities = utilities;
     }
 
-    public List<UploadFile> getFiles() {
-        return fileMapper.getFiles(utilities.getCurrentUserId());
+    public List<UploadFile> getFileList() {
+        return fileMapper.getFileList(utilities.getCurrentUserId());
     }
 
     public void addFile(MultipartFile multipartFile) throws IOException {
@@ -39,7 +37,15 @@ public class FileService {
         fileMapper.deleteFile(fileId, utilities.getCurrentUserId());
     }
 
-    public UploadFile getFile(Integer fileId) {
-        return fileMapper.getFile(fileId, utilities.getCurrentUserId());
+    public UploadFile downloadFile(Integer fileId) {
+        return fileMapper.downloadFile(fileId, utilities.getCurrentUserId());
+    }
+
+    public boolean checkFileNameExists(String fileName) {
+        if (fileMapper.checkFileNameExists(fileName, utilities.getCurrentUserId()).isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

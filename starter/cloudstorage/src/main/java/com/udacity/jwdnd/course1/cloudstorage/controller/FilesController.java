@@ -7,7 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -21,9 +24,18 @@ public class FilesController {
     }
 
     @PostMapping("/file")
-    public String addFile(@RequestParam("fileUpload") MultipartFile multipartFile) throws IOException {
-        fileService.addFile(multipartFile);
-        return "redirect:/home";
+    public String addFile(@RequestParam("fileUpload") MultipartFile multipartFile, Model model) throws IOException {
+        if (multipartFile.getOriginalFilename() == "") {
+            model.addAttribute("fileUploadStatus", "emptyFileName");
+        } else if (multipartFile.getSize() / Math.pow(1024, 2) > 2) {
+            model.addAttribute("fileUploadStatus", "tooLarge");
+        } else if (fileService.checkFileNameExists(multipartFile.getOriginalFilename())) {
+            model.addAttribute("fileUploadStatus", "fileNameAlreadyExists");
+        } else {
+            fileService.addFile(multipartFile);
+            model.addAttribute("fileUploadStatus", "ok");
+        }
+        return "result";
     }
 
     @GetMapping("/deleteFile")
@@ -34,7 +46,7 @@ public class FilesController {
 
     @GetMapping("/downloadFile")
     public ResponseEntity downloadFile(@RequestParam(name = "fileId") Integer fileId) {
-        UploadFile uploadFile = fileService.getFile(fileId);
+        UploadFile uploadFile = fileService.downloadFile(fileId);
         byte[] filedata = uploadFile.getFiledata();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.parseMediaType(uploadFile.getContenttype()));

@@ -28,6 +28,11 @@ public class CredentialService {
         return credentialList;
     }
 
+    public Credential getCredentialById(Integer credentialId, Integer userId) {
+        return credentialMapper.getCredentialById(credentialId, userId);
+    }
+
+
     public void addCredential(Credential credential) {
         SecureRandom random = new SecureRandom();
         byte[] key = new byte[16];

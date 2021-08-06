@@ -128,7 +128,6 @@ class CloudStorageApplicationTests {
         Assertions.assertEquals("http://localhost:" + this.port + "/login?logout=true", driver.getCurrentUrl());
         Assertions.assertEquals(expectedLogoutText, loginPage.obtainLogoutResult());
 
-        //TODO: does not work!!!
         //retry HomePage (unauthorized)
         driver.get("http://localhost:" + this.port + "/home");
         Assertions.assertEquals("http://localhost:" + this.port + "/login", driver.getCurrentUrl());

@@ -10,9 +10,9 @@
 </head>
 <body class="p-3 mb-2 bg-light text-black">
 <div class="container">
-    <div id="logoutDiv">
-        <a class="btn btn-secondary float-right" href="/logout" id="buttonLogout">Logout</a>
-    </div>
+    <form action="#" method="POST" th:action="@{'/logout'}">
+        <button class="btn btn-secondary float-right" id="buttonLogout" type="submit">Logout</button>
+    </form>
     <div id="contentDiv" style="clear: right;">
         <nav style="clear: right;">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -260,6 +260,7 @@
                 $('#credential-userId').val(userId ? userId : '');
                 $('#credentialModal').modal('show');
             }
+
 
 
 

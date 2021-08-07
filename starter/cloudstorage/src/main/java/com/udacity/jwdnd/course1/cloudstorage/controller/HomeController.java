@@ -23,17 +23,17 @@ public class HomeController {
         this.fileService = fileService;
     }
 
-    @GetMapping("/home")
+    @GetMapping({"/", "/home"})
     public String getHomePage(
             @ModelAttribute("Note") Note note,
             @ModelAttribute("Credential") Credential credential,
             @ModelAttribute("UploadFile") UploadFile uploadFile,
             Model model) {
 
-
         model.addAttribute("notes", this.notesService.getNotes());
         model.addAttribute("credentials", this.credentialService.getCredentials());
         model.addAttribute("uploadFiles", this.fileService.getFileList());
         return "home";
+
     }
 }

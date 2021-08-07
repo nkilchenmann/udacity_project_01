@@ -68,7 +68,7 @@ class CloudStorageApplicationTests {
     public void testUserSignupAndDuplicateUsername() {
         String firstName = "duplicateFirstName";
         String lastName = "duplicateLastName";
-        String username = "duplicatetTestUsername";
+        String username = "duplicateTestUsername";
         String password = "duplicateTestPassword";
         String expectedSuccessText = "You successfully signed up!";
         String expectedFailureText = "Username already exists.";

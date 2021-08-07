@@ -19,5 +19,4 @@ public interface NoteMapper {
 
     @Delete("DELETE FROM NOTES WHERE userid=#{userId} AND noteid=#{noteId}")
     void deleteNote(Integer noteId, Integer userId);
-
 }

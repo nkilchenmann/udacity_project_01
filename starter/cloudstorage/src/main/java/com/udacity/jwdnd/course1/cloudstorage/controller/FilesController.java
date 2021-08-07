@@ -32,16 +32,25 @@ public class FilesController {
         } else if (fileService.checkFileNameExists(multipartFile.getOriginalFilename())) {
             model.addAttribute("fileUploadStatus", "fileNameAlreadyExists");
         } else {
-            fileService.addFile(multipartFile);
-            model.addAttribute("fileUploadStatus", "ok");
+            try {
+                fileService.addFile(multipartFile);
+                model.addAttribute("fileUploadStatus", "ok");
+            } catch (Exception e) {
+                model.addAttribute("fileUploadStatus", "failure");
+            }
         }
         return "result";
     }
 
     @GetMapping("/deleteFile")
-    public String deleteFile(@RequestParam(name = "fileId") Integer fileId) {
-        fileService.deleteFile(fileId);
-        return "redirect:/home";
+    public String deleteFile(@RequestParam(name = "fileId") Integer fileId, Model model) {
+        try {
+            fileService.deleteFile(fileId);
+            model.addAttribute("fileUploadStatus", "ok");
+        } catch (Exception e) {
+            model.addAttribute("fileUploadStatus", "failure");
+        }
+        return "result";
     }
 
     @GetMapping("/downloadFile")

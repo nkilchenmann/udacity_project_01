@@ -14,23 +14,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SignupController {
     private UserService userService;
 
-    SignupController(UserService userService){
+    SignupController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping()
-    public String getSignup(){
-        return "/signup";
+    public String getSignup() {
+        return "signup";
     }
 
     @PostMapping
-    public void createSignup(@ModelAttribute("User") User user, Model model) {
+    public String createSignup(@ModelAttribute("User") User user, Model model) {
         if (userService.addUser(user)) {
-            model.addAttribute("userCreationStatus", "success");
+            model.addAttribute("userCreationStatus", "ok");
+            return "login";
         } else {
             model.addAttribute("userCreationStatus", "failure");
+            return "signup";
         }
     }
-
-
 }

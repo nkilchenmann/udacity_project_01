@@ -10,18 +10,16 @@ public class LoginPage {
 
     @FindBy(id = "inputUsername")
     private WebElement inputUsername;
-
     @FindBy(id = "inputPassword")
     private WebElement inputPassword;
-
     @FindBy(id = "buttonSubmitLogin")
     private WebElement buttonSubmitLogin;
-
     @FindBy(id = "messageLoginFailure")
     private WebElement messageLoginFailure;
-
     @FindBy(id = "messageLogoutSuccess")
     private WebElement messageLogoutSuccess;
+    @FindBy(id = "messageSignupSuccess")
+    private WebElement messageSignupSuccess;
 
     public LoginPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -50,6 +48,15 @@ public class LoginPage {
             return messageLogoutSuccess.getText();
         } catch (NoSuchElementException e) {
             System.out.println("Logout success text not set.");
+        }
+        return null;
+    }
+
+    public String obtainSignupResult() {
+        try {
+            return messageSignupSuccess.getText();
+        } catch (NoSuchElementException e) {
+            System.out.println("Signup success text not set");
         }
         return null;
     }

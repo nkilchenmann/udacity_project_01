@@ -70,7 +70,7 @@ class CloudStorageApplicationTests {
         String lastName = "duplicateLastName";
         String username = "duplicatetTestUsername";
         String password = "duplicateTestPassword";
-        String expectedSuccessText = "You successfully signed up! Please continue to the login page.";
+        String expectedSuccessText = "You successfully signed up!";
         String expectedFailureText = "Username already exists.";
 
         driver.get("http://localhost:" + this.port + "/signup");
@@ -78,8 +78,10 @@ class CloudStorageApplicationTests {
 
         signupPage.populateSignupForm(firstName, lastName, username, password);
         signupPage.submitSignupForm();
-        Assertions.assertEquals(expectedSuccessText, signupPage.obtainSignupResult());
+        LoginPage loginPage = new LoginPage(driver);
+        Assertions.assertEquals(expectedSuccessText, loginPage.obtainSignupResult());
 
+        driver.get("http://localhost:" + this.port + "/signup");
         signupPage.populateSignupForm(firstName, lastName, username, password);
         signupPage.submitSignupForm();
         Assertions.assertEquals(expectedFailureText, signupPage.obtainSignupResult());
@@ -146,6 +148,7 @@ class CloudStorageApplicationTests {
         String originalDescription = "Fancy note description";
         String changedTitle = "Changed Title";
         String changedDescription = "Changed Description";
+        String expectedResultMessage = "Your changes were successfully saved. Click here to continue.";
 
         //Signup
         driver.get("http://localhost:" + this.port + "/signup");
@@ -165,6 +168,8 @@ class CloudStorageApplicationTests {
         homePage.openNewNoteForm(driver);
         homePage.populateNoteForm(originalTitle, originalDescription, driver);
         homePage.submitNoteFormRequest(driver);
+        Assertions.assertTrue(homePage.retrieveResultMessage(expectedResultMessage, driver));
+        homePage.returnBackToHomePage(driver);
         homePage.switchToNotesTab();
         Assertions.assertTrue(homePage.noteListContainsTitleAndDescription(originalTitle, originalDescription, driver));
 
@@ -172,12 +177,16 @@ class CloudStorageApplicationTests {
         homePage.openEditNoteForm(driver);
         homePage.populateNoteForm(changedTitle, changedDescription, driver);
         homePage.submitNoteFormRequest(driver);
+        Assertions.assertTrue(homePage.retrieveResultMessage(expectedResultMessage, driver));
+        homePage.returnBackToHomePage(driver);
         homePage.switchToNotesTab();
         Assertions.assertTrue(homePage.noteListContainsTitleAndDescription(changedTitle, changedDescription, driver));
         Assertions.assertFalse(homePage.noteListContainsTitleAndDescription(originalTitle, originalDescription, driver));
 
         //delete Note
         homePage.deleteNote(driver);
+        Assertions.assertTrue(homePage.retrieveResultMessage(expectedResultMessage, driver));
+        homePage.returnBackToHomePage(driver);
         homePage.switchToNotesTab();
         Assertions.assertThrows(NoSuchElementException.class, () -> homePage.noteListContainsTitleAndDescription(changedTitle, changedDescription, driver));
     }
@@ -196,6 +205,7 @@ class CloudStorageApplicationTests {
         String changedUrl = "www.changed.com";
         String changedUsername = "changed_user";
         String changedPassword = "changed_password";
+        String expectedResultMessage = "Your changes were successfully saved. Click here to continue.";
         Credential originalCredential;
         Credential changedCredential;
 
@@ -217,6 +227,8 @@ class CloudStorageApplicationTests {
         homePage.openNewCredentialForm(driver);
         homePage.populateCredentialsForm(originalUrl, originalUsername, originalPassword, driver);
         homePage.submitCredentialsFormRequest(driver);
+        Assertions.assertTrue(homePage.retrieveResultMessage(expectedResultMessage, driver));
+        homePage.returnBackToHomePage(driver);
         homePage.switchToCredentialsTab();
         originalCredential = credentialService.getCredentialById(
                 Integer.valueOf(driver.findElement(By.cssSelector("#buttonEditCredentials")).getAttribute("data-credentialid")),
@@ -227,6 +239,8 @@ class CloudStorageApplicationTests {
         homePage.openEditCredentialForm(driver);
         homePage.populateCredentialsForm(changedUrl, changedUsername, changedPassword, driver);
         homePage.submitCredentialsFormRequest(driver);
+        Assertions.assertTrue(homePage.retrieveResultMessage(expectedResultMessage, driver));
+        homePage.returnBackToHomePage(driver);
         homePage.switchToCredentialsTab();
         changedCredential = credentialService.getCredentialById(
                 Integer.valueOf(driver.findElement(By.cssSelector("#buttonEditCredentials")).getAttribute("data-credentialid")),
@@ -236,6 +250,8 @@ class CloudStorageApplicationTests {
 
         //delete Note
         homePage.deleteCredentials(driver);
+        Assertions.assertTrue(homePage.retrieveResultMessage(expectedResultMessage, driver));
+        homePage.returnBackToHomePage(driver);
         homePage.switchToCredentialsTab();
         Assertions.assertThrows(NoSuchElementException.class, () -> homePage.credentialsListContainsUrlAndUsernameAndEncryptedPassword(changedUrl, changedUsername, changedPassword, changedCredential.getKey(), driver));
 

@@ -37,6 +37,8 @@ public class HomePage {
     private WebElement navigationTabNotes;
     @FindBy(id = "nav-credentials-tab")
     private WebElement navigationTabCredentials;
+    @FindBy(css = "body > div > div > span > a")
+    private WebElement linkResultToHomepage;
 
     //Input elements
     @FindBy(id = "note-title")
@@ -51,7 +53,8 @@ public class HomePage {
     private WebElement inputCredentialsPassword;
 
     //Output elements
-
+    @FindBy(css = "body > div > div > span")
+    private WebElement resultMessage;
 
     public HomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -67,6 +70,20 @@ public class HomePage {
 
     public void switchToCredentialsTab() {
         navigationTabCredentials.click();
+    }
+
+    public void returnBackToHomePage(WebDriver driver) {
+        new WebDriverWait(driver, Duration.ofSeconds(3).getSeconds()).until(ExpectedConditions.elementToBeClickable(linkResultToHomepage));
+        linkResultToHomepage.click();
+    }
+
+    public boolean retrieveResultMessage(String expectedResultMessage, WebDriver driver) {
+        new WebDriverWait(driver, Duration.ofSeconds(3).getSeconds()).until(ExpectedConditions.visibilityOf(resultMessage));
+        if (resultMessage.getText().equals(expectedResultMessage)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void openNewNoteForm(WebDriver driver) {

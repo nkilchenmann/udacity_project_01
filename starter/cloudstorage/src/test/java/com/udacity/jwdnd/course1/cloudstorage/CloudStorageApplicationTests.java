@@ -107,6 +107,8 @@ class CloudStorageApplicationTests {
         String lastName = "testLastName";
         String username = "testUsername";
         String password = "testPassword";
+        String expectedErrorTitle = "Oops! This page does not exist!";
+        String expectedErrorRedirectMessage = "Return back home";
         String expectedLogoutText = "You have been successfully logged out.";
 
         //Signup
@@ -121,7 +123,14 @@ class CloudStorageApplicationTests {
         loginPage.populateLoginForm(username, password);
         loginPage.submitLoginForm();
 
+        //ErrorPage (any invalid resource)
+        driver.get("http://localhost:" + this.port + "/invalid");
+        ErrorPage errorPage = new ErrorPage(driver);
+        Assertions.assertEquals(errorPage.getErrorTitle(driver), expectedErrorTitle);
+        Assertions.assertEquals(errorPage.getErrorRedirectMessage(driver), expectedErrorRedirectMessage);
+
         //HomePage (authorized)
+        driver.get("http://localhost:" + this.port + "/home");
         Assertions.assertEquals("http://localhost:" + this.port + "/home", driver.getCurrentUrl());
 
         //Logout
